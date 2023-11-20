@@ -41,7 +41,6 @@ module.exports = function (app) {
 
   app.delete("/api/notes/:id", (req, res) => {
     let data = fs.readFileSync("./app/data/db.json", "utf8");
-
     const dataJSON = JSON.parse(data);
     const newNotes = dataJSON.filter((note) => {
       return note.id !== req.params.id;

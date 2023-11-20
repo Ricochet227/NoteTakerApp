@@ -6,7 +6,7 @@ const PORT = process.env.PORT || 3001;
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(express.static(path.join(__dirname, 'app', 'public')));
+app.use(express.static(path.join(__dirname, 'public')));
 
 require("./routes/api-routes")(app);
 require("./routes/html-routes")(app);
