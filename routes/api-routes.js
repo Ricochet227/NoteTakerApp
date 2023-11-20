@@ -1,10 +1,11 @@
 const fs = require("fs");
-var uniqid = require("uniqid");
+const path = require("path");
+const uniqid = require("uniqid");
 
 module.exports = function (app) {
   app.get("/api/notes", (req, res) => {
     console.log("Execute GET notes request");
-    let data = fs.readFileSync("./app/data/db.json", "utf8");
+    let data = fs.readFileSync(path.join(__dirname, "../data/db.json"), "utf8");
     res.json(JSON.parse(data));
   });
 
@@ -16,14 +17,12 @@ module.exports = function (app) {
 
     console.log("Post Request for new notes");
 
-    let data = fs.readFileSync("./app/data/db.json", "utf8");
-
+    let data = fs.readFileSync(path.join(__dirname, "../data/db.json"), "utf8");
     const dataJSON = JSON.parse(data);
-
     dataJSON.push(newNote);
 
     fs.writeFile(
-      "./app/data/db.json",
+      path.join(__dirname, "../data/db.json"),
       JSON.stringify(dataJSON),
       (err, text) => {
         if (err) {
@@ -35,23 +34,27 @@ module.exports = function (app) {
     );
 
     console.log("Success, added a new note");
-
     res.json(data);
   });
 
   app.delete("/api/notes/:id", (req, res) => {
-    let data = fs.readFileSync("./app/data/db.json", "utf8");
+    let data = fs.readFileSync(path.join(__dirname, "../data/db.json"), "utf8");
     const dataJSON = JSON.parse(data);
+
     const newNotes = dataJSON.filter((note) => {
       return note.id !== req.params.id;
     });
-     
-    fs.writeFile( "./app/data/db.json",JSON.stringify(newNotes),(err, text) => {
+
+    fs.writeFile(
+      path.join(__dirname, "../data/db.json"),
+      JSON.stringify(newNotes),
+      (err, text) => {
         if (err) {
           console.error(err);
           return;
         }
-      });
+      }
+    );
 
     res.json(newNotes);
   });
